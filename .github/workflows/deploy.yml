@@ -1,0 +1,44 @@
+name: Deploy MuleSoft App to CloudHub 2.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Anypoint Environment'
+        required: true
+        default: 'Sandbox'
+        type: choice
+        options:
+          - Sandbox
+          - Production
+      target:
+        description: 'CloudHub 2.0 Shared Space Target'
+        required: true
+        default: 'CloudHub-US-East-2'
+        type: string
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and Deploy to CloudHub 2.0 Shared Space
+        env:
+          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
+        run: |
+          mvn clean deploy -DmuleDeploy \
+            -Denv="${{ inputs.environment }}" \
+            -Dtarget="${{ inputs.target }}" \
+            -DconnectedAppClientId="$ANYPOINT_CLIENT_ID" \
+            -DconnectedAppClientSecret="$ANYPOINT_CLIENT_SECRET"

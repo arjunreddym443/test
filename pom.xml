@@ -4,7 +4,7 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>test</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
 	<name>test</name>
@@ -29,6 +29,27 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+			    <groupId>org.groupId</groupId> <!-- keep org.mule.tools.maven -->
+			    <artifactId>mule-maven-plugin</artifactId>
+			    <version>${mule.maven.plugin.version}</version>
+			    <extensions>true</extensions>
+			    <configuration>
+			        <cloudhub2Deployment>
+			            <uri>https://mulesoft.com</uri>
+			            <provider>MC</provider>
+			            <environment>${env}</environment>
+			            <target>${target}</target>
+			            <muleVersion>${app.runtime}</muleVersion>
+			            <connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
+			            <connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
+			            <connectedAppGrantType>client_credentials</connectedAppGrantType>
+			            <applicationName>${project.artifactId}-${env}</applicationName>
+			            <replicas>1</replicas>
+			            <vCores>0.1</vCores>
+			        </cloudhub2Deployment>
+			    </configuration>
 			</plugin>
 		</plugins>
 	</build>
