@@ -123,10 +123,9 @@
 			</snapshots>
 		</repository> -->
 		<repository>
-			<id>anypoint-exchange-sandbox</id>
-			<name>Anypoint Exchange</name>
-			<url>https://mulesoft.com{project.groupId}/maven</url>
-			<layout>default</layout>
+		    <id>anypoint-exchange-sandbox</id>
+		    <name>Anypoint Exchange</name>
+		    <url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
 		</repository>
 		<repository>
 			<id>mulesoft-releases</id>
