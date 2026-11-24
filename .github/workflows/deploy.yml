@@ -57,6 +57,7 @@ jobs:
 
       - name: Show Maven settings
         run: |
+          echo "===== settings file CONTENT ====="
           cat ~/.m2/settings.xml | sed 's/<password>.*<\/password>/<password>****<\/password>/'
 
       - name: Verify generated artifacts
@@ -64,6 +65,22 @@ jobs:
           mvn clean package
           echo "===== TARGET CONTENT ====="
           ls -la target
+
+      - name: Verify jar content
+        run: |
+          echo "===== VERIFY JAR CONTENT ====="
+          jar tf target/test-1.0.1-mule-application.jar | grep mule-artifact.json
+
+      - name: Show effective pom exchange section
+        run: |
+          echo "===== POM EXCHANGE SECTION ====="
+          mvn help:effective-pom -Doutput=effective-pom.xml
+          grep -A 40 -B 5 "exchange-mule-maven-plugin" effective-pom.xml || true
+
+      - name: Verify Mule artifact inside JAR
+        run: |
+          echo "===== VERIFY MULE ARTIFACT INSIDE JAR ====="
+          jar tf target/test-1.0.1-mule-application.jar | sort
 
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:
