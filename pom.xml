@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.13.2</app.runtime>
+		<app.runtime>4.9.2</app.runtime>
 		<mule.maven.plugin.version>4.3.0</mule.maven.plugin.version>
 	</properties>
 
@@ -36,6 +36,8 @@
 						<environment>${env}</environment>
 						<target>${target}</target>
 						<muleVersion>${app.runtime}</muleVersion>
+						<javaVersion>17</javaVersion>
+            			<releaseChannel>LTS</releaseChannel>
 						<connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
 						<connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
@@ -67,7 +69,7 @@
 		<repository>
 			<id>anypoint-exchange-sandbox</id>
 			<name>Anypoint Exchange</name>
-			<url>https://mulesoft.com</url>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
 			<layout>default</layout>
 		</repository>
 	</distributionManagement>
@@ -85,13 +87,13 @@
 		<repository>
 			<id>anypoint-exchange-sandbox</id>
 			<name>Anypoint Exchange</name>
-			<url>https://mulesoft.com</url>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
-			<url>https://mulesoft.org</url>
+			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
