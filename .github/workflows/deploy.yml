@@ -14,7 +14,7 @@ on:
       target:
         description: 'CloudHub 2.0 Shared Space Target'
         required: true
-        default: 'CloudHub-US-East-2'
+        default: 'Cloudhub-US-East-2'
         type: string
 
 jobs:
