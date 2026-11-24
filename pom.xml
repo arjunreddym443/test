@@ -75,7 +75,7 @@
 	</distributionManagement>
 
 	<repositories>
-		<repository>
+<!-- 		<repository>
 			<id>central</id>
 			<name>Central Repository</name>
 			<url>https://apache.org</url>
@@ -83,7 +83,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>anypoint-exchange-sandbox</id>
 			<name>Anypoint Exchange</name>
@@ -99,7 +99,7 @@
 	</repositories>
 
 	<pluginRepositories>
-		<pluginRepository>
+<!-- 		<pluginRepository>
 			<id>central</id>
 			<name>Central Repository</name>
 			<url>https://apache.org</url>
@@ -107,7 +107,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</pluginRepository>
+		</pluginRepository> -->
 		<pluginRepository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
