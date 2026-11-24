@@ -32,13 +32,33 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Configure Maven settings.xml for Anypoint Exchange
+        env:
+          ANYPOINT_CLIENT_ID: \${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
+        run: |
+          mkdir -p ~/.m2
+          cat << EOF > ~/.m2/settings.xml
+          <settings xmlns="http://apache.org"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://apache.org https://apache.org">
+            <servers>
+              <server>
+                <id>anypoint-exchange-sandbox</id>
+                <username>~~~Client~~~</username>
+                <password>\({ANYPOINT_CLIENT_ID}~?~\){ANYPOINT_CLIENT_SECRET}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:
-          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
-          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
+          ANYPOINT_CLIENT_ID: \${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
           mvn clean deploy -DmuleDeploy \
-            -Denv="${{ inputs.environment }}" \
-            -Dtarget="${{ inputs.target }}" \
-            -DconnectedAppClientId="$ANYPOINT_CLIENT_ID" \
-            -DconnectedAppClientSecret="$ANYPOINT_CLIENT_SECRET"
+            -Denv="\${{ inputs.environment }}" \
+            -Dtarget="\${{ inputs.target }}" \
+            -DconnectedAppClientId="\$ANYPOINT_CLIENT_ID" \
+            -DconnectedAppClientSecret="\$ANYPOINT_CLIENT_SECRET"
