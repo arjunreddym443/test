@@ -50,7 +50,6 @@ jobs:
               </server>
             </servers>
           </settings>
-          EOF
 
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:

@@ -38,6 +38,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<javaVersion>17</javaVersion>
             			<releaseChannel>LTS</releaseChannel>
+            			<server>anypoint-exchange-sandbox</server>
 						<connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
 						<connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
