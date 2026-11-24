@@ -33,9 +33,12 @@ jobs:
           cache: 'maven'
 
       - name: Configure Maven settings.xml for Anypoint Exchange
+        env:
+          ANYPOINT_CLIENT_ID: \${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
           mkdir -p ~/.m2
-          cat << 'EOF' > ~/.m2/settings.xml
+          cat << EOF > ~/.m2/settings.xml
           <settings xmlns="http://apache.org"
                     xmlns:xsi="http://w3.org"
                     xsi:schemaLocation="http://apache.org https://apache.org">
@@ -43,7 +46,7 @@ jobs:
               <server>
                 <id>anypoint-exchange-sandbox</id>
                 <username>~~~Client~~~</username>
-                <password>\({env.ANYPOINT_CLIENT_ID}~?~\){env.ANYPOINT_CLIENT_SECRET}</password>
+                <password>\(ANYPOINT_CLIENT_ID~?~\)ANYPOINT_CLIENT_SECRET</password>
               </server>
             </servers>
           </settings>
