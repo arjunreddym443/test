@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany</groupId>
+	<groupId>9dc194fa-e077-48e2-9c55-e2f307c84034</groupId>
 	<artifactId>test</artifactId>
 	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
@@ -29,27 +29,21 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-			    <groupId>org.groupId</groupId> <!-- keep org.mule.tools.maven -->
-			    <artifactId>mule-maven-plugin</artifactId>
-			    <version>${mule.maven.plugin.version}</version>
-			    <extensions>true</extensions>
-			    <configuration>
-			        <cloudhub2Deployment>
-			            <uri>https://mulesoft.com</uri>
-			            <provider>MC</provider>
-			            <environment>${env}</environment>
-			            <target>${target}</target>
-			            <muleVersion>${app.runtime}</muleVersion>
-			            <connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
-			            <connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
-			            <connectedAppGrantType>client_credentials</connectedAppGrantType>
-			            <applicationName>${project.artifactId}-${env}</applicationName>
-			            <replicas>1</replicas>
-			            <vCores>0.1</vCores>
-			        </cloudhub2Deployment>
-			    </configuration>
+				<configuration>
+					<cloudhub2Deployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<provider>MC</provider>
+						<environment>${env}</environment>
+						<target>${target}</target>
+						<muleVersion>${app.runtime}</muleVersion>
+						<connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
+						<connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
+						<connectedAppGrantType>client_credentials</connectedAppGrantType>
+						<applicationName>${project.artifactId}-${env}</applicationName>
+						<replicas>1</replicas>
+						<vCores>0.1</vCores>
+					</cloudhub2Deployment>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -68,6 +62,15 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange</name>
+			<url>https://mulesoft.com{project.groupId}/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
