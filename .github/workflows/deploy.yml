@@ -45,8 +45,8 @@ jobs:
             <servers>
               <server>
                 <id>anypoint-exchange-sandbox</id>
-                <username>~~~Client~~~</username>
-                <password>\({ANYPOINT_CLIENT_ID}~?~\){ANYPOINT_CLIENT_SECRET}</password>
+                <username>$ANYPOINT_USERNAME</username>
+                <password>$ANYPOINT_PASSWORD</password>
               </server>
             </servers>
           </settings>
