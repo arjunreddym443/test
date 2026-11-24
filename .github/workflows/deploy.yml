@@ -38,15 +38,15 @@ jobs:
           ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
           mkdir -p ~/.m2
-          cat << EOF > ~/.m2/settings.xml
+          cat << 'EOF' > ~/.m2/settings.xml
           <settings xmlns="http://apache.org"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:xsi="http://w3.org"
                     xsi:schemaLocation="http://apache.org https://apache.org">
             <servers>
               <server>
                 <id>anypoint-exchange-sandbox</id>
-                <username>$ANYPOINT_USERNAME</username>
-                <password>$ANYPOINT_PASSWORD</password>
+                <username>~~~Client~~~</username>
+                <password>\({env.ANYPOINT_CLIENT_ID}~?~\){env.ANYPOINT_CLIENT_SECRET}</password>
               </server>
             </servers>
           </settings>
