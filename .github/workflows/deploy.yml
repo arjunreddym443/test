@@ -59,6 +59,12 @@ jobs:
         run: |
           cat ~/.m2/settings.xml | sed 's/<password>.*<\/password>/<password>****<\/password>/'
 
+      - name: Verify generated artifacts
+        run: |
+          mvn clean package
+          echo "===== TARGET CONTENT ====="
+          ls -la target
+
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:
           ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
