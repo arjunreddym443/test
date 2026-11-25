@@ -105,11 +105,11 @@ jobs:
 
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:
-          ANYPOINT_CLIENT_ID: \${{ secrets.ANYPOINT_CLIENT_ID }}
-          ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
+          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
           mvn clean deploy -X -DmuleDeploy \
-            -Denv="\${{ inputs.environment }}" \
-            -Dtarget="\${{ inputs.target }}" \
-            -DconnectedAppClientId="\$ANYPOINT_CLIENT_ID" \
-            -DconnectedAppClientSecret="\$ANYPOINT_CLIENT_SECRET"
+          -Denv="${{ inputs.environment }}" \
+          -Dtarget="${{ inputs.target }}" \
+          -DconnectedAppClientId=${ANYPOINT_CLIENT_ID} \
+          -DconnectedAppClientSecret=${ANYPOINT_CLIENT_SECRET}
