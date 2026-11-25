@@ -11,7 +11,6 @@ on:
         options:
           - Sandbox
           - Production
-
       target:
         description: 'CloudHub 2.0 Shared Space Target'
         required: true
@@ -33,18 +32,16 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Configure Maven settings.xml for Anypoint Exchange
+      - name: Configure Maven settings.xml
         env:
           ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
           ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
           mkdir -p ~/.m2
-
+  
           cat > ~/.m2/settings.xml <<EOF
-          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                    https://maven.apache.org/xsd/settings-1.0.0.xsd">
+          <?xml version="1.0"?>
+          <settings>
             <servers>
               <server>
                 <id>anypoint-exchange-sandbox</id>
@@ -52,44 +49,67 @@ jobs:
                 <password>${ANYPOINT_CLIENT_ID}~?~${ANYPOINT_CLIENT_SECRET}</password>
               </server>
             </servers>
+            <pluginGroups>
+              <pluginGroup>org.mule.tools</pluginGroup>
+            </pluginGroups>
+            <profiles>
+              <profile>
+                <id>mule-extra-repos</id>
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>
+                <repositories>
+                  <repository>
+                    <id>mule-public</id>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </repository>
+                </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>mule-public</id>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+              <profile>
+                <id>Mule</id>
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>
+                <repositories>
+                  <repository>
+                    <id>MuleRepository</id>
+                    <name>MuleRepository</name>
+                    <url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+                  </repository>
+                  <repository>
+                    <id>MuleRepository2</id>
+                    <name>MuleRepository2</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases-ee/</url>
+                  </repository>
+                  <repository>
+                    <id>MuleRepositoryPublic</id>
+                    <name>MuleRepositoryPublic</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </repository>
+                  <repository>
+                    <id>anypoint-exchange-v3</id>
+                    <name>Anypoint Platform Exchange Repository</name>
+                    <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/9dc194fa-e077-48e2-9c55-e2f307c84034/maven</url>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
           </settings>
           EOF
 
-      # - name: Show Maven settings
-        # run: |
-          # echo "===== settings file CONTENT ====="
-          # cat ~/.m2/settings.xml | sed 's/<password>.*<\/password>/<password>****<\/password>/'
-
-      # - name: Verify generated artifacts
-        # run: |
-          # mvn clean package
-          # echo "===== TARGET CONTENT ====="
-          # ls -la target
-
-      # - name: Verify jar content
-        # run: |
-          # echo "===== VERIFY JAR CONTENT ====="
-          # jar tf target/test-1.0.1-mule-application.jar | grep mule-artifact.json
-
-      # - name: Show effective pom exchange section
-        # run: |
-          # echo "===== POM EXCHANGE SECTION ====="
-          # mvn help:effective-pom -Doutput=effective-pom.xml
-          # grep -A 40 -B 5 "exchange-mule-maven-plugin" effective-pom.xml || true
-
-      # - name: Verify Mule artifact inside JAR
-        # run: |
-          # echo "===== VERIFY MULE ARTIFACT INSIDE JAR ====="
-          # jar tf target/test-1.0.1-mule-application.jar | sort
-
       - name: Build and Deploy to CloudHub 2.0 Shared Space
         env:
-          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
-          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
+          ANYPOINT_CLIENT_ID: \${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: \${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
-          mvn clean deploy \
-            -DmuleDeploy \
-            -Denv="${{ inputs.environment }}" \
-            -Dtarget="${{ inputs.target }}" \
-            -DconnectedAppClientId="$ANYPOINT_CLIENT_ID" \
-            -DconnectedAppClientSecret="$ANYPOINT_CLIENT_SECRET"
+          mvn clean deploy -DmuleDeploy \
+            -Denv="\${{ inputs.environment }}" \
+            -Dtarget="\${{ inputs.target }}" \
+            -DconnectedAppClientId="\$ANYPOINT_CLIENT_ID" \
+            -DconnectedAppClientSecret="\$ANYPOINT_CLIENT_SECRET"
