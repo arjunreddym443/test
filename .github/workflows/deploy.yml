@@ -1,0 +1,115 @@
+name: Deploy MuleSoft App to CloudHub 2.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Anypoint Environment'
+        required: true
+        default: 'Sandbox'
+        type: choice
+        options:
+          - Sandbox
+          - Production
+      target:
+        description: 'CloudHub 2.0 Shared Space Target'
+        required: true
+        default: 'Cloudhub-US-East-2'
+        type: string
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Configure Maven settings.xml
+        env:
+          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
+        run: |
+          mkdir -p ~/.m2
+  
+          cat > ~/.m2/settings.xml <<EOF
+          <?xml version="1.0"?>
+          <settings>
+            <servers>
+              <server>
+                <id>anypoint-exchange-sandbox</id>
+                <username>~~~Client~~~</username>
+                <password>${ANYPOINT_CLIENT_ID}~?~${ANYPOINT_CLIENT_SECRET}</password>
+              </server>
+            </servers>
+            <pluginGroups>
+              <pluginGroup>org.mule.tools</pluginGroup>
+            </pluginGroups>
+            <profiles>
+              <profile>
+                <id>mule-extra-repos</id>
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>
+                <repositories>
+                  <repository>
+                    <id>mule-public</id>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </repository>
+                </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>mule-public</id>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+              <profile>
+                <id>Mule</id>
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>
+                <repositories>
+                  <repository>
+                    <id>MuleRepository</id>
+                    <name>MuleRepository</name>
+                    <url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+                  </repository>
+                  <repository>
+                    <id>MuleRepository2</id>
+                    <name>MuleRepository2</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases-ee/</url>
+                  </repository>
+                  <repository>
+                    <id>MuleRepositoryPublic</id>
+                    <name>MuleRepositoryPublic</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+                  </repository>
+                  <repository>
+                    <id>anypoint-exchange-v3</id>
+                    <name>Anypoint Platform Exchange Repository</name>
+                    <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/9dc194fa-e077-48e2-9c55-e2f307c84034/maven</url>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+          </settings>
+          EOF
+
+      - name: Build and Deploy to CloudHub 2.0 Shared Space
+        env:
+          ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
+          ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
+        run: |
+          mvn clean deploy -DmuleDeploy \
+          -Denv="${{ inputs.environment }}" \
+          -Dtarget="${{ inputs.target }}" \
+          -DconnectedAppClientId=${ANYPOINT_CLIENT_ID} \
+          -DconnectedAppClientSecret=${ANYPOINT_CLIENT_SECRET}
