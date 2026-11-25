@@ -108,7 +108,7 @@ jobs:
           ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
           ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: |
-          mvn clean deploy -X -DmuleDeploy \
+          mvn clean deploy -DmuleDeploy \
           -Denv="${{ inputs.environment }}" \
           -Dtarget="${{ inputs.target }}" \
           -DconnectedAppClientId=${ANYPOINT_CLIENT_ID} \
