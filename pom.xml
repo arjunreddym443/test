@@ -25,7 +25,6 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<classifier>mule-application</classifier>
 					<cloudhub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<provider>MC</provider>
@@ -42,31 +41,6 @@
 						<vCores>0.1</vCores>
 					</cloudhub2Deployment>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.mule.tools.maven</groupId>
-				<artifactId>exchange-mule-maven-plugin</artifactId>
-				<version>0.0.23</version>
-				<configuration>
-					<server>anypoint-exchange-sandbox</server>
-					<classifier>mule-application</classifier>
-				</configuration>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>exchange-pre-deploy</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>deploy</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>exchange-deploy</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
